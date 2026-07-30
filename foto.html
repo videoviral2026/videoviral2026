@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foto Viral 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-link">← Kembali</a>
+  <span class="live-badge"><span class="dot"></span> Live</span>
+</div>
+
+<div class="page-head foto-theme">
+  <h1>Foto Viral 2026</h1>
+  <p>Klik salah satu foto di bawah untuk melihatnya dalam ukuran penuh.</p>
+</div>
+
+<div id="grid" class="grid"></div>
+
+<div id="emptyState" class="empty-state" style="display:none;">
+  Belum ada foto yang ditambahkan.
+  <code>
+    // buka file foto.html, cari bagian PHOTO_LIST<br>
+    { title: "Judul foto", url: "https://contoh.com/foto1.jpg" }
+  </code>
+</div>
+
+<footer class="site-footer">Foto Viral 2026</footer>
+
+<!-- Lightbox foto -->
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <img id="lightboxImg" class="lightbox-img" src="" alt="">
+    <p class="modal-title" id="modalTitle"></p>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   ⭐ TAMBAHKAN LINK FOTO DI SINI ⭐
+   Cukup tambah satu baris baru { title: "...", url: "..." }
+   di dalam kurung siku PHOTO_LIST di bawah ini.
+
+   url harus berupa link gambar langsung, biasanya berakhiran
+   .jpg / .jpeg / .png / .webp (boleh dari hosting mana saja,
+   misalnya imgur, ibb.co, drive publik, dll — asalkan link-nya
+   bisa dibuka langsung sebagai gambar).
+   ========================================================= */
+
+const PHOTO_LIST = [
+  // Contoh — silakan hapus atau ganti dengan foto kamu sendiri
+  {
+    title: "Contoh Foto Viral 1",
+    url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800"
+  },
+  {
+    title: "Contoh Foto Viral 2",
+    url: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800"
+  },
+
+  // Tambahkan foto baru kamu di bawah baris ini 👇
+  // {
+  //   title: "Judul foto kamu",
+  //   url: "https://contoh.com/foto-kamu.jpg"
+  // },
+];
+
+/* ========================================================= */
+
+const grid = document.getElementById('grid');
+const emptyState = document.getElementById('emptyState');
+const usablePhotos = PHOTO_LIST.filter(p => p.url);
+
+if(usablePhotos.length === 0){
+  emptyState.style.display = 'block';
+} else {
+  usablePhotos.forEach((item) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="thumb">
+        <img src="${item.url}" alt="${item.title}" loading="lazy">
+      </div>
+      <div class="info">
+        <h3>${item.title}</h3>
+        <span class="tag">Foto</span>
+      </div>
+    `;
+    card.addEventListener('click', () => openPhoto(item));
+    grid.appendChild(card);
+  });
+}
+
+const modalOverlay = document.getElementById('modalOverlay');
+const lightboxImg = document.getElementById('lightboxImg');
+const modalTitle = document.getElementById('modalTitle');
+const modalClose = document.getElementById('modalClose');
+
+function openPhoto(item){
+  lightboxImg.src = item.url;
+  lightboxImg.alt = item.title || '';
+  modalTitle.textContent = item.title || '';
+  modalOverlay.classList.add('open');
+}
+
+function closeModal(){
+  modalOverlay.classList.remove('open');
+  lightboxImg.src = '';
+}
+
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', (e) => {
+  if(e.target === modalOverlay) closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') closeModal();
+});
+</script>
+
+</body>
+</html>
